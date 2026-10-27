@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kervan Hazır, Yol Uzun</title>
+<style>
+:root{--n:#1d2640;--r:#a63a2b;--w:#efe9dc;--y:#e0a526;--g:#6f7d4e;--i:#2c3a63}
+*{box-sizing:border-box}
+body{margin:0;font:19px/1.55 Georgia,"Times New Roman",serif;background:var(--n);color:var(--w);min-height:100vh}
+body:before{content:"";display:block;height:14px;background:repeating-linear-gradient(90deg,var(--r) 0 14px,var(--y) 14px 21px,var(--w) 21px 28px,var(--y) 28px 35px)}
+main{max-width:860px;margin:auto;padding:14px 16px 40px}
+h1{font-size:2.3em;line-height:1.1;margin:.3em 0;letter-spacing:.5px}
+h2{margin:.1em 0 .4em;color:var(--y)}
+.road{display:flex;align-items:center;gap:6px;margin:6px 0 14px;font-size:.85em}
+.road i{flex:1;height:4px;background:var(--i);border-radius:2px}.road i.on{background:var(--y)}
+.road b{font-weight:400;opacity:.5}.road b.on{opacity:1;color:var(--y)}
+.card{background:var(--i);border:2px solid var(--y);border-radius:6px 22px 6px 22px;padding:18px;margin:12px 0}
+.usta{display:flex;gap:10px;background:var(--w);color:var(--n);border-radius:22px 6px 22px 6px;padding:10px 14px;margin:12px 0;min-height:60px}
+.usta span{font-size:1.8em}
+button{font:inherit;background:var(--r);color:var(--w);border:2px solid var(--y);border-radius:8px;padding:9px 20px;cursor:pointer;min-height:44px}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+table{border-collapse:collapse;width:100%;text-align:center;margin:10px 0}
+th,td{border:2px solid var(--g);padding:8px;min-width:60px}th{text-align:left;background:var(--n)}
+.slot{background:var(--n);min-height:48px;border-style:dashed;border-color:var(--y)}
+.slot.ok{background:var(--g);border-style:solid}
+.toks{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0;min-height:48px}
+.tok{background:var(--y);color:var(--n);padding:8px 14px;border-radius:8px;cursor:grab;touch-action:none;user-select:none;font-weight:bold}
+.ghost{position:fixed;z-index:9;pointer-events:none;opacity:.85}
+input[type=range]{width:100%;accent-color:var(--y);height:34px}
+textarea{width:100%;min-height:100px;font:inherit;border-radius:8px;padding:10px;border:2px solid var(--y);background:var(--w);color:var(--n)}
+.big{font-size:1.6em;letter-spacing:2px;word-break:break-all}
+.sit{margin:8px 0;display:grid;grid-template-columns:1fr 150px;gap:10px;align-items:stretch}
+.sit div:first-child{background:var(--n);padding:8px 12px;border-radius:8px}
+small{opacity:.75}
+@media(max-width:560px){.sit{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000}.noprint{display:none}.card{border-color:#000;background:#fff}}
+</style></head><body><main>
+<div class="road" id="road"></div>
+<div id="app"></div>
+<div class="usta noprint" id="usta"></div>
+<small>Bu oyundaki hız, yem ve süre değerleri varsayımsaldır; tarihsel bilgi değildir.</small>
+</main>
+<script>
+const $=s=>document.querySelector(s),app=$('#app');
+const say=t=>$('#usta').innerHTML='<span>🏇</span><div>'+t+'</div>';
+const N=['Hazırlık','Bozkır Yolu','Mola Yeri','Dağ Geçidi','Göç Defteri'];
+let st=0,f1={},f3={},i2=0,pl={at:4,h:5,txt:''};
+function go(n){st=n;$('#road').innerHTML=N.map((x,i)=>(i?'<i class="'+(i<=n?'on':'')+'"></i>':'')+'<b class="'+(i<=n?'on':'')+'">'+(i==n?'🐎 ':'')+x+'</b>').join('');[s0,s1,s2,s3,s4][n]();scrollTo(0,0)}
+function drag(root,fn){root.querySelectorAll('.tok').forEach(t=>t.onpointerdown=e=>{e.preventDefault();const c=t.cloneNode(true);c.classList.add('ghost');document.body.append(c);
+const mv=ev=>{c.style.left=ev.clientX-30+'px';c.style.top=ev.clientY-22+'px'};mv(e);
+const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);c.remove();const el=document.elementFromPoint(ev.clientX,ev.clientY),sl=el&&el.closest('.slot');if(sl)fn(t.dataset.v,sl)};
+addEventListener('pointermove',mv);addEventListener('pointerup',up)})}
+const next=(l,n)=>'<p><button id="nx">'+l+'</button></p>';
+function s0(){app.innerHTML=`<h1>Kervan Hazır, Yol Uzun</h1><p><i>Obanın yayla göçünde atlılar</i></p><div class="card"><p>Bozkırda sabah olmuş. Oba, yaz için yaylaya göçmeye hazır. Ama atların yemi, dinlenme yerleri ve yolun ne kadar süreceği henüz belli değil.</p><p>Göçün önünden giden genç atlı sensin. Yolu, molayı ve yemi doğru hesaplarsan oba yaylaya sağ salim ulaşır. Yanlış hesap kimseyi eleştirmez; yol sana neyin tutmadığını gösterir.</p></div><button id="nx">Kervanı yola çıkar</button>`;say('Ben yol arkadaşınım. Göçte en büyük yardımcı defterdir. Gördüğünü deftere yaz, sonra düşün.');$('#nx').onclick=()=>go(1)}
+function s1(){const L=[1,3,5],V=[6,8,15,18,24,30].filter(v=>!Object.values(f1).includes(v)),d=L.every(h=>f1[h]);
+app.innerHTML=`<div class="card"><h2>Bozkır Yolu</h2><p>Göç kervanı bozkırda aynı hızla yürüyor. Yol arkadaşın, 2 saatte 12 km yol gittiklerini yazmış. Defterin boş yerlerine uygun yolları sürükleyip bırak.</p>
+<table><tr><th>Süre (saat)</th><td>2</td>${L.map(h=>'<td>'+h+'</td>').join('')}</tr><tr><th>Yol (km)</th><td>12</td>${L.map(h=>`<td class="slot ${f1[h]?'ok':''}" data-h="${h}">${f1[h]||'?'}</td>`).join('')}</tr></table>
+<div class="toks">${V.map(v=>`<span class="tok" data-v="${v}">${v} km</span>`).join('')}</div>${d?'<p>1 saatteki yol, yani <b>birim oran</b>, 6 km/saat. Süre kaç katına çıkarsa yol da o kadar katına çıkıyor.</p>'+next('Konağa var'):''}</div>`;
+if(d){say('Gördün mü? Süre üç katına çıkınca yol da üç katına çıktı. Bu duruma orantılı diyoruz.');$('#nx').onclick=()=>go(2)}
+drag(app,(v,s)=>{const h=+s.dataset.h;if(+v==6*h){f1[h]=+v;s1()}else say('Kervan bu kadar yol gitmiş olamaz. Önce 1 saatte kaç km yürüdüğünü bul, sonra süreyle çarp.')})}
+function s2(){const T=[{a:6},{a:9},{y:40}][i2],A=!!T.a;
+app.innerHTML=`<div class="card"><h2>Mola Yeri</h2><p>Yol arkadaşın 3 at için 15 kg yem ayırmış ve her ata eşit pay vermişti. ${A?'Şimdi göçte <b>'+T.a+' at</b> var. Kaç kg yem ayıracaksın?':'Yük atlarında <b>40 kg</b> yem kaldı. Her ata aynı pay düşecekse kaç at doyurulabilir?'}</p>
+<input type="range" id="r" min="${A?0:1}" max="${A?70:12}" value="${A?0:1}" aria-label="ayar"><div><b id="v"></b></div><div class="big" id="h"></div><p id="p"></p><button id="ok">Yemi dağıt</button></div>`;
+const r=$('#r'),up=()=>{const y=A?+r.value:T.y,a=A?T.a:+r.value;$('#v').textContent=A?y+' kg yem':a+' at';$('#h').textContent='🐎'.repeat(a);$('#p').textContent='Her ata '+(y/a).toFixed(1).replace('.',',')+' kg düşüyor.'};r.oninput=up;up();
+$('#ok').onclick=()=>{const y=A?+r.value:T.y,a=A?T.a:+r.value;if(y==5*a){say('Her ata 5 kg düştü. Kimse aç kalmadı, kimse haksızlığa uğramadı. Paylaşmak göçün yükünü hafifletir.');i2++;setTimeout(()=>i2<3?s2():go(3),1600)}else say('Her ata düşen payı izle. Üç ata 15 kg verildiğinde pay neydi? Aynı pay korunmalı.')}}
+function s3(){const R=[[6,6],[4,10],[3,13]],n=f3.n||0,S=[['Bozkır: 1 saatte 6 km, 2 saatte 12 km','Orantılı'],['Geçit: 1 saatte 6 km, 2 saatte 10 km','Orantısız'],['Mola Yeri: 3 at için 15 kg, 6 at için 30 kg','Orantılı']];
+app.innerHTML=`<div class="card"><h2>Dağ Geçidi</h2><p>Yol yokuşa döndü; atlar yoruldu. Her saatin sonunda yol arkadaşın ne kadar yol alındığını yazıyor.</p>
+<table><tr><th>Saat</th><th>O saatte (km)</th><th>Toplam (km)</th></tr>${R.slice(0,n).map((x,i)=>`<tr><td>${i+1}</td><td>${x[0]}</td><td>${x[1]}</td></tr>`).join('')}</table>
+${n<3?'<button id="w">1 saat yürü</button>':`<p>Üç durumu yan yana koy. Etiketleri uygun durumun üstüne sürükle.</p><div class="toks"><span class="tok" data-v="Orantılı">Orantılı</span><span class="tok" data-v="Orantısız">Orantısız</span></div>${S.map((s,i)=>`<div class="sit"><div>${s[0]}</div><div class="slot ${f3[i]?'ok':''}" data-i="${i}">${f3[i]||'?'}</div></div>`).join('')}${S.every((s,i)=>f3[i])?next('Sefer defterine geç'):''}`}</div>`;
+if(n<3){$('#w').onclick=()=>{f3.n=n+1;say(n==0?'İlk saat bozkır hızıyla gitti. Bakalım ikinci saatte ne olacak.':'Yokuş kervanı yavaşlattı. Süre arttı ama yol aynı oranda artmadı.');s3()}}
+else{drag(app,(v,s)=>{const i=+s.dataset.i;if(v==S[i][1]){f3[i]=v;s3()}else say('Birim oranı karşılaştır: ilk saatte 6 km ise 2 saatte kaç km olmalıydı? Tabloda kaç çıktı?')});
+if(S.every((s,i)=>f3[i])){say('Doğru. Süre iki katına çıktığında yol da iki katına çıkıyorsa orantılıdır. Geçitte bu bozuldu, o yüzden orantısızdır.');$('#nx').onclick=()=>go(4)}}}
+function s4(){app.innerHTML=`<div class="card"><h2>Göç Defteri</h2><p>Göç planı senin. Kaç at göçe eşlik edecek, bozkırda kaç saat yürüyecek? Defterin hesapları senin yerine tutulur.</p>
+<label>At sayısı: <b id="a1"></b></label><input type="range" id="at" min="2" max="10" value="${pl.at}"><label>Bozkırda yürüyüş: <b id="h1"></b> saat</label><input type="range" id="hs" min="1" max="8" value="${pl.h}">
+<table><tr><th>Yol (bozkır)</th><td id="yk"></td></tr><tr><th>Gereken yem</th><td id="ym"></td></tr></table>
+<p>Defterine yaz: Hangi bölümde oran sabit kaldı, hangisinde bozuldu? Nasıl anladın?</p><textarea id="t">${pl.txt}</textarea><p><button id="ok">Defteri mühürle</button></p></div>`;
+const up=()=>{pl.at=+$('#at').value;pl.h=+$('#hs').value;$('#a1').textContent=pl.at;$('#h1').textContent=pl.h;$('#yk').textContent=6*pl.h+' km';$('#ym').textContent=5*pl.at+' kg'};$('#at').oninput=$('#hs').oninput=up;up();
+say('Yaz bakalım. Doğru söylemekten çok, neden öyle düşündüğünü yazmak önemli.');
+$('#ok').onclick=()=>{pl.txt=$('#t').value.trim();if(pl.txt.length<25){say('Biraz daha anlat. Bozkırda, konakta ve geçitte ne gördüğünü yaz.');return}
+app.innerHTML=`<div class="card"><h2>Yaylaya varıldı</h2><p>Göç kervanı ${pl.at} atla yola çıktı; bozkırda ${pl.h} saatte ${6*pl.h} km yürüdü ve ${5*pl.at} kg yemi adil paylaştı.</p><p><b>Göç defterindeki not:</b></p><p id="nt"></p><p>Sorumluluk, adalet ve dayanışma bu göçün yükünü hafifletti.</p><p class="noprint"><button id="pr">Defteri yazdır</button> <button id="rs">Yeniden başla</button></p></div>`;$('#nt').textContent=pl.txt;
+$('#pr').onclick=()=>print();$('#rs').onclick=()=>{f1={};f3={};i2=0;pl={at:4,h:5,txt:''};go(0)};say('Kervan hazırdı, yol uzundu. Ama hesabı doğru tutan atlı yolu kısaltır.')}}
+go(0);
+</script></body></html>
